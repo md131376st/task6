@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'realbash.apps.RealbashConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

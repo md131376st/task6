@@ -1,0 +1,11 @@
+/* Pretty Pandas Dataframes */
+.dataframe * {border-color: #1ec0a8 !important;}
+.dataframe th{background: #eee;}
+.dataframe td{text-align: right; min-width:5em;}
+
+/* Format summary rows */
+.dataframe-summary-row tr:last-child,
+.dataframe-summary-col td:last-child{
+    background: #eee;
+    font-weight: 500;
+}

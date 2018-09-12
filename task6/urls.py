@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from realbash.views import model_form_upload
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', model_form_upload, name='simple_upload'),
 ]

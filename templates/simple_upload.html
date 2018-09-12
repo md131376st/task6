@@ -1,0 +1,30 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block body %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+         <div class="col-sm-offset-2 col-sm-10">
+            {{ form.as_p}}
+         </div>
+{#    <input type="file" name="myfile">#}
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit">Upload</button>
+        </div>
+    {% if messages %}
+        {% for message in messages %}
+             <div class="col-sm-offset-2 col-sm-10">
+                {% if message.tags == "error" %}
+                   <p style="color: #aa0033; ">  {{message }}</p>
+
+             {% endif %}
+             {% if message.tags == "success" %}
+                  <p style="color:#0066cc; ">  {{message }}</p>
+             {% endif %}
+             </div>
+        {% endfor %}
+
+        {% endif %}
+  </form>
+
+{% endblock %}
