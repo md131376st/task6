@@ -19,7 +19,8 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.externals import joblib
 
-
+""" این تابع یرای تست می یاشد به صورتی که مدل های sklearn  را ایجاد می کند با الگورتنی می که ستاره و تگار نوشتن 
+و فایل character-predictions_pose.csv' و ./uci-news-aggregator.csv' و  سیو کردن مدل ها در database   """
 def create_and_save_model():
     data = pd.read_csv('./character-predictions_pose.csv')
     data4 = pd.read_csv('./uci-news-aggregator.csv')
@@ -78,7 +79,7 @@ def create_and_save_model():
     print(gnb3.score(x2_test, y2_test))
 
 
-
+    # save sklearn object in database
     joblib.dump(gnb1, 'Gaussian.pkl')
     joblib.dump(gnb2, 'Multinomial.pkl')
     joblib.dump(gnb3, 'Bernoulli.pkl')
@@ -93,29 +94,34 @@ def create_and_save_model():
 
 # create_and_save_model()
 def model_form_upload(request):
+    #برای ایجاد مدل ها خط بعد را از کامنت در بیاورید.
     # create_and_save_model()
     if request.method == 'POST':
         form = Myform(request.POST, request.FILES)
         myfile = request.FILES['csv_file']
+        #cheak if file is a csv
         if not myfile.name.endswith('.csv'):
             messages.error(request, 'File is not CSV type')
             return redirect('simple_upload')
         if form.is_valid():
             mymodel = CsvDoc.objects.filter(name=request.POST['name'])
             # print(mymodel)
+            # cheak if the name in the post is valid
             if not mymodel:
                 messages.error(request, 'your model is not valid please try again')
                 return redirect('simple_upload')
             mymodel = joblib.load(str(mymodel[0]))
             data = pd.read_csv(myfile)
+            #this for is """ # Fit label encoder and return encoded labels""" for differnt algo you might not neadit
             for column in data.columns:
                 le = LabelEncoder()
                 data[column] = le.fit_transform(data[column].astype(str))
                 if data[column].dtype == type(object):
                     data[column] = le.fit_transform(data[column])
+            #if data in csv file is correct
             try:
                 data = mymodel.predict(data)
-                data=pd.DataFrame(data,columns=['result'])
+                data = pd.DataFrame(data,columns=['result'])
                 data.style.set_table_styles([{
                     'border - color':  '#1ec0a8'
                      }
@@ -123,7 +129,6 @@ def model_form_upload(request):
                 return HttpResponse(data.to_html(classes='datafram'))
             except ValueError:
                 messages.error(request, "invalid data")
-
             return redirect('simple_upload')
     else:
         form = Myform()
