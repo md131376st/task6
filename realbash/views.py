@@ -112,7 +112,9 @@ def model_form_upload(request):
                 return redirect('simple_upload')
             mymodel = joblib.load(str(mymodel[0]))
             data = pd.read_csv(myfile)
+
             #this for is """ # Fit label encoder and return encoded labels""" for differnt algo you might not neadit
+
             for column in data.columns:
                 le = LabelEncoder()
                 data[column] = le.fit_transform(data[column].astype(str))
@@ -122,10 +124,12 @@ def model_form_upload(request):
             try:
                 data = mymodel.predict(data)
                 data = pd.DataFrame(data,columns=['result'])
+                #trying to make the table styles
                 data.style.set_table_styles([{
                     'border - color':  '#1ec0a8'
                      }
                 ])
+                # return the data predicted as a html form
                 return HttpResponse(data.to_html(classes='datafram'))
             except ValueError:
                 messages.error(request, "invalid data")
