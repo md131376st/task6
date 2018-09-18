@@ -102,6 +102,10 @@ def model_form_upload(request):
             return redirect('simple_upload')
         if form.is_valid():
             mymodel = CsvDoc.objects.filter(name=request.POST['name'])
+            # print(mymodel)
+            if not mymodel:
+                messages.error(request, 'your model is not valid please try again')
+                return redirect('simple_upload')
             mymodel = joblib.load(str(mymodel[0]))
             data = pd.read_csv(myfile)
             for column in data.columns:
